@@ -11,6 +11,9 @@ typedef struct{
 	int st,en;
 } data;
 // pushing data
+
+sem_t sem;//shared semaphore variable
+
 void push(data* info,char val){
 	if(info->st == -1){
 		info->st = 0;
@@ -27,6 +30,7 @@ int main(){
 	
 	key_t key=ftok("1.c",53);
 	int segid=shmget(key,sizeof(data),0777|IPC_CREAT);
+	int sema_id=shmget(key1,sizeof(sem),0777|IPC_CREAT);
 	data *info=(data*)shmat(segid,NULL,SHM_RND);
 	info->st=-1;info->en=-1;
 	for(int i=0;i<100;i++){
